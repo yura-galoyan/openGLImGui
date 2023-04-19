@@ -1,0 +1,43 @@
+cmake_minimum_required(VERSION 3.14)
+
+project(MyProject)
+
+set(IMGUI_PATH include/imgui )
+# download and compile from Github
+include(FetchContent)
+FetchContent_Declare(
+  glfw
+  GIT_REPOSITORY https://github.com/glfw/glfw.git
+  GIT_TAG        3.3.4
+)
+FetchContent_MakeAvailable(glfw)
+# Find OpenGL library in System
+find_package(OpenGL REQUIRED)
+
+
+include_directories(${IMGUI_PATH})
+include_directories(${IMGUI_PATH}/backends)
+include_directories(include/KHR)
+include_directories(include)
+
+
+#set Imgui source files
+set(IMGUI_SRC
+${IMGUI_PATH}/imgui.cpp
+${IMGUI_PATH}/imgui_draw.cpp
+${IMGUI_PATH}/imgui_widgets.cpp
+${IMGUI_PATH}/imgui_demo.cpp
+${IMGUI_PATH}/imgui_tables.cpp
+${IMGUI_PATH}/backends/imgui_impl_glfw.cpp
+${IMGUI_PATH}/backends/imgui_impl_opengl3.cpp )
+
+#set gl source files
+set(GLAD_SRC
+include/glad/glad.c)
+
+# Create executable target for main.cpp
+add_executable(App main.cpp ${IMGUI_SRC} ${GLAD_SRC}
+)
+
+# Link MyApp with GLFW and OpenGL libraries
+target_link_libraries(App PRIVATE glfw OpenGL::GL )

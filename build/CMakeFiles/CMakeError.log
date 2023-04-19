@@ -1,0 +1,23 @@
+Performing C SOURCE FILE Test _GLFW_HAS_64ASLR failed with the following output:
+Change Dir: C:/Users/yura/Desktop/glfw_imgui/build/CMakeFiles/CMakeScratch/TryCompile-c7nloc
+
+Run Build Command(s):C:/mingw32/bin/mingw32-make.exe -f Makefile cmTC_17f04/fast && C:/mingw32/bin/mingw32-make.exe  -f CMakeFiles\cmTC_17f04.dir\build.make CMakeFiles/cmTC_17f04.dir/build
+mingw32-make[1]: Entering directory 'C:/Users/yura/Desktop/glfw_imgui/build/CMakeFiles/CMakeScratch/TryCompile-c7nloc'
+Building C object CMakeFiles/cmTC_17f04.dir/src.c.obj
+C:\mingw32\bin\gcc.exe -D_GLFW_HAS_64ASLR  -Wl,--high-entropy-va -o CMakeFiles\cmTC_17f04.dir\src.c.obj -c C:\Users\yura\Desktop\glfw_imgui\build\CMakeFiles\CMakeScratch\TryCompile-c7nloc\src.c
+Linking C executable cmTC_17f04.exe
+"C:\Program Files\CMake\bin\cmake.exe" -E cmake_link_script CMakeFiles\cmTC_17f04.dir\link.txt --verbose=1
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\cmTC_17f04.dir/objects.a
+C:\mingw32\bin\ar.exe qc CMakeFiles\cmTC_17f04.dir/objects.a @CMakeFiles\cmTC_17f04.dir\objects1
+C:\mingw32\bin\gcc.exe  -Wl,--high-entropy-va -Wl,--whole-archive CMakeFiles\cmTC_17f04.dir/objects.a -Wl,--no-whole-archive -o cmTC_17f04.exe -Wl,--out-implib,libcmTC_17f04.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\cmTC_17f04.dir\linkLibs.rsp
+c:/mingw32/bin/../lib/gcc/i686-w64-mingw32/12.2.0/../../../../i686-w64-mingw32/bin/ld.exe: unrecognized option '--high-entropy-va'
+c:/mingw32/bin/../lib/gcc/i686-w64-mingw32/12.2.0/../../../../i686-w64-mingw32/bin/ld.exe: use the --help option for usage information
+collect2.exe: error: ld returned 1 exit status
+mingw32-make[1]: *** [CMakeFiles\cmTC_17f04.dir\build.make:100: cmTC_17f04.exe] Error 1
+mingw32-make[1]: Leaving directory 'C:/Users/yura/Desktop/glfw_imgui/build/CMakeFiles/CMakeScratch/TryCompile-c7nloc'
+mingw32-make: *** [Makefile:126: cmTC_17f04/fast] Error 2
+
+
+Source file was:
+int main(void) { return 0; }
+
