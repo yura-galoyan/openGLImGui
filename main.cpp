@@ -52,8 +52,6 @@ int main(){
     }  
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    //
-    ImGui_ImplGlfw_InitForOpenGL(window,)
 
 
 
