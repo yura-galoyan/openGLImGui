@@ -46,10 +46,12 @@ int main(){
         return -1;
     }
     glfwMakeContextCurrent(window);
+
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
-    }  
+    }
+
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 
@@ -111,6 +113,7 @@ int main(){
         0, 1, 3,   // first triangle
         1, 2, 3    // second triangle
     }; 
+
 
     unsigned int VAO, VBO, EBO;
     glGenVertexArrays(1, &VAO); 
