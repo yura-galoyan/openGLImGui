@@ -54,8 +54,7 @@ int main(){
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //init vertex Shader
     unsigned int vertexShader;
@@ -100,10 +99,10 @@ int main(){
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    float toRight = 0.5f;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     float vertices[] = {
-         0.5f, toRight, 0.0f,  // top right
+         0.5f, 0.5f, 0.0f,  // top right
          0.5f, -0.5f, 0.0f,  // bottom right
         -0.5f, -0.5f, 0.0f,  // bottom left
         -0.5f,  0.5f, 0.0f   // top left 
@@ -114,6 +113,8 @@ int main(){
         1, 2, 3    // second triangle
     }; 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     unsigned int VAO, VBO, EBO;
     glGenVertexArrays(1, &VAO); 
@@ -137,7 +138,12 @@ int main(){
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     glBindVertexArray(0); 
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     // render loop
     while(!glfwWindowShouldClose(window))
     {
@@ -147,7 +153,6 @@ int main(){
 
 
         // rendering commands here
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
@@ -163,8 +168,6 @@ int main(){
     }
 
     glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
     glDeleteProgram(shaderProgram);
     glfwTerminate();
     return 0;
