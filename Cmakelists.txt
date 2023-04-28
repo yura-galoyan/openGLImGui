@@ -29,14 +29,20 @@ ${IMGUI_PATH}/imgui_widgets.cpp
 ${IMGUI_PATH}/imgui_demo.cpp
 ${IMGUI_PATH}/imgui_tables.cpp
 ${IMGUI_PATH}/backends/imgui_impl_glfw.cpp
-${IMGUI_PATH}/backends/imgui_impl_opengl3.cpp )
+${IMGUI_PATH}/backends/imgui_impl_opengl3.cpp 
+)
 
 #set gl source files
 set(GLAD_SRC
-include/glad/glad.c)
+include/glad/glad.c
+)
+
+set(SOURCES
+glLoader.cpp
+)
 
 # Create executable target for main.cpp
-add_executable(App main.cpp ${IMGUI_SRC} ${GLAD_SRC}
+add_executable(App main.cpp ${IMGUI_SRC} ${GLAD_SRC} ${SOURCES} 
 )
 
 # Link MyApp with GLFW and OpenGL libraries
