@@ -39,6 +39,7 @@ include/glad/glad.c
 
 set(SOURCES
 glLoader.cpp
+glDrawer.cpp
 )
 
 # Create executable target for main.cpp
