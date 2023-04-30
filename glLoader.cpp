@@ -1,9 +1,12 @@
 #include "glLoader.hpp"
 
 #include <vector>
+#include <iostream>
+
+namespace GlLoader{
 
 
-DrawingDetails GlLoader::loadMeshIntoGPU(  std::vector<Vertex> pointsPositions,   std::vector<unsigned int> indices){
+DrawingDetails loadMeshIntoGPU(  std::vector<Vertex> pointsPositions,   std::vector<unsigned int> indices){
 
     unsigned int VAO, VBO, EBO;
 
@@ -30,7 +33,7 @@ DrawingDetails GlLoader::loadMeshIntoGPU(  std::vector<Vertex> pointsPositions, 
 
 }
 
-const bool GlLoader::unloadMeshfromGPU( std::vector<DrawingDetails>& objectDetails  ){
+const bool unloadMeshfromGPU( std::vector<DrawingDetails>& objectDetails  ){
     
     for(auto& detail : objectDetails){
         glDeleteBuffers(1, &detail.VAO);
@@ -40,4 +43,59 @@ const bool GlLoader::unloadMeshfromGPU( std::vector<DrawingDetails>& objectDetai
     objectDetails.shrink_to_fit();
 
     return true;
+}
+
+unsigned int loadShaders(const char* vertexShaderSource, const char* fragmentShaderSource ){
+
+
+    std::cout<<vertexShaderSource<<"\n"<<std::endl;
+    std::cout<<fragmentShaderSource<<"\n"<<std::endl;
+
+    //init vertex Shader
+    unsigned int vertexShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource( vertexShader,1,&vertexShaderSource,NULL );
+    glCompileShader(vertexShader);
+
+    //this is how you check GLSL errors
+    int  success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if(!success){
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+
+    //init fragment shader
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if(!success){
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+    
+    //combine shaders
+    unsigned int shaderProgram;
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if(!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog<< std::endl;
+    }
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    return shaderProgram;
+
+};
+
 }
