@@ -33,5 +33,4 @@
 
 #directories
 build/
-.vscode/
-
+.vscode\settings.json
