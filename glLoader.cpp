@@ -5,7 +5,6 @@
 
 namespace GlLoader{
 
-
 DrawingDetails loadMeshIntoGPU(  std::vector<Vertex> pointsPositions,   std::vector<unsigned int> indices){
 
     unsigned int VAO, VBO, EBO;
@@ -46,11 +45,6 @@ const bool unloadMeshfromGPU( std::vector<DrawingDetails>& objectDetails  ){
 }
 
 unsigned int loadShaders(const char* vertexShaderSource, const char* fragmentShaderSource ){
-
-
-    std::cout<<vertexShaderSource<<"\n"<<std::endl;
-    std::cout<<fragmentShaderSource<<"\n"<<std::endl;
-
     //init vertex Shader
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);

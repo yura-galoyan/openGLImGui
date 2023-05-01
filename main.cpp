@@ -1,5 +1,6 @@
 
 #include <imgui.h>
+
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
@@ -11,6 +12,7 @@
 #include <fstream> //std::ifstream
 #include <iterator> //std::istream_iterator
 #include <sstream>
+#include <cmath> //std::sin
 
 #include "glTypes.hpp"
 #include "glLoader.hpp"
@@ -26,6 +28,14 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
 };
 
+inline std::string getFileContents(const std::string_view path){
+    std::stringstream buf;
+    std::ifstream fin(path.data());
+    buf << fin.rdbuf();
+    fin.close();
+    return buf.str();
+}
+
 int main(){
 
     glfwInit();
@@ -34,7 +44,7 @@ int main(){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
-    if (window == NULL){
+    if (!window){
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return -1;
@@ -48,6 +58,15 @@ int main(){
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    //imgui stuff
+
+    ImGui::CreateContext();
+
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
+
     std::vector<DrawingDetails> drawingObjectDetails;
     std::vector<Vertex> vertexesPositions;
 
@@ -58,22 +77,28 @@ int main(){
 
     drawingObjectDetails.push_back( GlLoader::loadMeshIntoGPU(vertexesPositions, indices));
 
-    std::stringstream buf;
 
+    std::string vertexShaderSource = getFileContents("../shaderVertex.frag");
+    std::string fragmentShaderSource = getFileContents("../shaderFragment.frag");
 
-    std::ifstream fin("../shaderVertex.frag");
-    buf << fin.rdbuf();
-    std::string vertexShaderSource = buf.str();
-    buf.str("");
-    fin.close();
-    fin.open("../shaderFragment.frag");
-    buf << fin.rdbuf();
-    std::string fragmentShaderSource = buf.str();
-    fin.close();
 
     unsigned int shaderProgram = GlLoader::loadShaders(vertexShaderSource.data(), fragmentShaderSource.data() );
+    int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+    int pos = glGetUniformLocation(shaderProgram, "pos4");
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     // render loop
+
+
+    float redValue{};
+    float greenValue{};
+    float blueValue{};
+
+
+    float x{};
+    float y{};
+    float z{};
+
+
     while(!glfwWindowShouldClose(window))
     {
         // input
@@ -81,12 +106,26 @@ int main(){
         // rendering commands here
         glClear(GL_COLOR_BUFFER_BIT);
 
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::SliderFloat("Red", &redValue, 0.0f, 1.0f);
+        ImGui::SliderFloat("Green", &greenValue, 0.0f, 1.0f);
+        ImGui::SliderFloat("Blue", &blueValue, 0.0f, 1.0f);
+
+        ImGui::SliderFloat("x", &x, 0.0f, 1.0f);
+        ImGui::SliderFloat("y", &y, 0.0f, 1.0f);
+        ImGui::SliderFloat("z", &z, 0.0f, 1.0f);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        glUniform4f(pos, x, y, z, 1.0f);
+        glUniform4f(vertexColorLocation, redValue, greenValue, blueValue, 1.0f);
+
         glUseProgram(shaderProgram);
-
-
         glDrawer::draw(drawingObjectDetails);
-
-
 
         // check and call events and swap the buffers
         glfwSwapBuffers(window);
@@ -95,6 +134,11 @@ int main(){
 
     GlLoader::unloadMeshfromGPU(drawingObjectDetails);
     glDeleteProgram(shaderProgram);
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwTerminate();
     return 0;
 }
