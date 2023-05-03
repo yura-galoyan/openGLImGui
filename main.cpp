@@ -84,15 +84,11 @@ int main(){
 
     unsigned int shaderProgram = GlLoader::loadShaders(vertexShaderSource.data(), fragmentShaderSource.data() );
     int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-    int pos = glGetUniformLocation(shaderProgram, "pos4");
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     // render loop
 
 
-    float redValue{};
-    float greenValue{};
-    float blueValue{};
-
+    float rgba[4] = {0};
 
     float x{};
     float y{};
@@ -110,19 +106,13 @@ int main(){
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::SliderFloat("Red", &redValue, 0.0f, 1.0f);
-        ImGui::SliderFloat("Green", &greenValue, 0.0f, 1.0f);
-        ImGui::SliderFloat("Blue", &blueValue, 0.0f, 1.0f);
+        ImGui::ColorPicker4("trianglePicker",rgba);
 
-        ImGui::SliderFloat("x", &x, 0.0f, 1.0f);
-        ImGui::SliderFloat("y", &y, 0.0f, 1.0f);
-        ImGui::SliderFloat("z", &z, 0.0f, 1.0f);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        glUniform4f(pos, x, y, z, 1.0f);
-        glUniform4f(vertexColorLocation, redValue, greenValue, blueValue, 1.0f);
+        glUniform4f(vertexColorLocation, rgba[0], rgba[1], rgba[2],rgba[3]);
 
         glUseProgram(shaderProgram);
         glDrawer::draw(drawingObjectDetails);
