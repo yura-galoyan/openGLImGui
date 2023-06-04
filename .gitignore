@@ -33,6 +33,8 @@
 
 #directories
 build/
+dependencies/build
+dependencies/glfw
 .vscode/
 .vscode/settings.json
 .vscode\settings.json

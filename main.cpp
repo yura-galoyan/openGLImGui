@@ -106,8 +106,7 @@ int main(){
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::ColorPicker4("trianglePicker",rgba);
-
+        ImGui::ColorPicker4("trianglePicker123",rgba);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
