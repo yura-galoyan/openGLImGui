@@ -25,6 +25,7 @@ set(GLFW_LIBRARY_PATH ${GLFW_LIB}/libglfw3.a)
 set(SOURCES
 glLoader.cpp
 glDrawer.cpp
+Shader.cpp
 )
 
 

@@ -14,9 +14,10 @@
 #include <sstream>
 #include <cmath> //std::sin
 
+#include "Shader.hpp"
 #include "glTypes.hpp"
 #include "glLoader.hpp"
-#include "GlDrawer.hpp"
+#include "glDrawer.hpp"
 
 void processInput(GLFWwindow *window)
 {
@@ -29,8 +30,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height){
 };
 
 inline std::string getFileContents(const std::string_view path){
+
     std::stringstream buf;
     std::ifstream fin(path.data());
+    if(!fin.is_open()){
+       fin.open(std::string("../") + path.data()); 
+    }
     buf << fin.rdbuf();
     fin.close();
     return buf.str();
@@ -77,26 +82,15 @@ int main(){
 
     drawingObjectDetails.push_back( GlLoader::loadMeshIntoGPU(vertexesPositions, indices));
 
-
-    std::string vertexShaderSource = getFileContents("../shaderVertex.frag");
-    std::string fragmentShaderSource = getFileContents("../shaderFragment.frag");
-
-
-    unsigned int shaderProgram = GlLoader::loadShaders(vertexShaderSource.data(), fragmentShaderSource.data() );
-    int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+    Shader shader1("shaderFragment.fs","shaderVertex.vs");
+    int vertexColorLocation = glGetUniformLocation(shader1.get_id(), "ourColor");
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     // render loop
 
 
     float rgba[4] = {0};
 
-    float x{};
-    float y{};
-    float z{};
-
-
-    while(!glfwWindowShouldClose(window))
-    {
+    while(!glfwWindowShouldClose(window)){
         // input
         processInput(window);
         // rendering commands here
@@ -113,7 +107,7 @@ int main(){
 
         glUniform4f(vertexColorLocation, rgba[0], rgba[1], rgba[2],rgba[3]);
 
-        glUseProgram(shaderProgram);
+        shader1.use();
         glDrawer::draw(drawingObjectDetails);
 
         // check and call events and swap the buffers
@@ -122,7 +116,7 @@ int main(){
     }
 
     GlLoader::unloadMeshfromGPU(drawingObjectDetails);
-    glDeleteProgram(shaderProgram);
+    glDeleteProgram(shader1.get_id());
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
