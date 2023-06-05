@@ -9,11 +9,9 @@
 Shader::Shader(const std::string_view vertexPath,const std::string_view fragmentPath ){
     auto vertexCode = getFileContents(vertexPath);
     auto fragmentCode = getFileContents(fragmentPath);
-    std::cout<<vertexCode;
     auto vId  = compileShader(vertexCode,"vertex");
     auto fId  = compileShader(fragmentCode,"fragment");
     compileShaderProgram(vId, fId);
-    
 };
 
 void Shader::use(){ 
@@ -28,7 +26,8 @@ void Shader::setInt(const std::string &name, int value) const {
 }
 void Shader::setFloat(const std::string &name, float value) const { 
     glUniform1f(glGetUniformLocation(id, name.c_str()), value); 
-} 
+}
+
 
 std::string Shader::getFileContents(const std::string_view path) const{
     std::cout<<path<<std::endl;
@@ -44,7 +43,6 @@ std::string Shader::getFileContents(const std::string_view path) const{
 }
 
 void Shader::compileShaderProgram(unsigned int vertexId,unsigned int fragmentId){
-
     id = glCreateProgram();
     glAttachShader(id, vertexId);
     glAttachShader(id, fragmentId);
@@ -67,7 +65,14 @@ void Shader::compileShaderProgram(unsigned int vertexId,unsigned int fragmentId)
 unsigned int Shader::compileShader(const std::string& code, std::string_view name) const{
     auto shaderCode = code.c_str();
     unsigned int shaderId;
-    shaderId = glCreateShader(GL_VERTEX_SHADER);
+    if(name == "vertex"){
+        shaderId = glCreateShader(GL_VERTEX_SHADER);
+    }else if(name == "fragment"){
+        shaderId = glCreateShader(GL_FRAGMENT_SHADER);
+    }
+    else{
+        std::cout<<"error when creating vertex/fragment shader"<<std::endl;
+    }
     glShaderSource( shaderId,1,&shaderCode,NULL );
     glCompileShader(shaderId);
 
@@ -80,4 +85,16 @@ unsigned int Shader::compileShader(const std::string& code, std::string_view nam
         std::cout << "ERROR::"<< name <<"::COMPILATION_FAILED" <<infoLog << std::endl;
     }   
     return shaderId; 
+}
+
+ShaderBuilder ShaderBuilder::add_vertexCode(std::string_view path){
+    vPath = path;
+}
+
+ShaderBuilder ShaderBuilder::add_fragmentCode(std::string_view path){
+    fPath = path;
+}
+
+Shader ShaderBuilder::create(){
+    return Shader{vPath, fPath};
 }
