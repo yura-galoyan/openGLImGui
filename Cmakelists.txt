@@ -10,7 +10,7 @@ set(GLFW_LIB dependencies/glfw/lib)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+set(GLFW_INSTALL on CACHE BOOL "" FORCE)
 
 include_directories(${GLFW_INCLUDE})
 include_directories(${IMGUI_PATH})
@@ -35,7 +35,7 @@ add_executable(App main.cpp ${IMGUI_SRC} ${SOURCES})
 # Specify glfw static lib directory
 target_link_directories(App PRIVATE dependencies/glfw/lib)
 target_link_directories(App PRIVATE dependencies/build)
-
+target_link_directories(App PRIVATE dependencies/build/_deps/glfw-build/src)
 set(static_libraries "-l:libglfw3.a" "-l:libimgui.a" "-l:libglad.a" )
 
 
