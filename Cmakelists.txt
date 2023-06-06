@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.14)
 
 project(MyProject)
 
+# Specify the path to libglfw3.a
+set(GLFW_LIBRARY_PATH ${GLFW_LIB}/libglfw3.a)
+set(GLFW_DEPS dependencies/build/_deps)
+
+
 set(IMGUI_PATH dependencies/imgui)
 set(GLFW_INCLUDE dependencies/glfw/include)
 set(GLFW_LIB dependencies/glfw/lib)
@@ -17,10 +22,8 @@ include_directories(${IMGUI_PATH})
 include_directories(${IMGUI_PATH}/backends)
 include_directories(dependencies/KHR)
 include_directories(dependencies)
-
-# Specify the path to libglfw3.a
-set(GLFW_LIBRARY_PATH ${GLFW_LIB}/libglfw3.a)
-
+include_directories(${GLFW_DEBS}/glfw-src/include)
+include_directories(dependencies/build/_deps/glfw-src/include)
 
 set(SOURCES
 glLoader.cpp
@@ -35,7 +38,7 @@ add_executable(App main.cpp ${IMGUI_SRC} ${SOURCES})
 # Specify glfw static lib directory
 target_link_directories(App PRIVATE dependencies/glfw/lib)
 target_link_directories(App PRIVATE dependencies/build)
-target_link_directories(App PRIVATE dependencies/build/_deps/glfw-build/src)
+target_link_directories(App PRIVATE ${GLFW_DEPS}/glfw-build/src)
 set(static_libraries "-l:libglfw3.a" "-l:libimgui.a" "-l:libglad.a" )
 
 
