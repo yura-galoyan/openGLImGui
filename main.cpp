@@ -82,7 +82,8 @@ int main(){
 
     drawingObjectDetails.push_back( GlLoader::loadMeshIntoGPU(vertexesPositions, indices));
 
-    Shader shader1("shaderFragment.fs","shaderVertex.vs");
+    ShaderBuilder shaderBuilder;
+    Shader shader1 = shaderBuilder.add_fragmentCode("shaderFragment.fs").add_vertexCode("shaderVertex.vs").create();
     int vertexColorLocation = glGetUniformLocation(shader1.get_id(), "ourColor");
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     // render loop
