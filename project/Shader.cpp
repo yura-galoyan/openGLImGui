@@ -30,12 +30,11 @@ void Shader::setFloat(const std::string &name, float value) const {
 
 
 std::string Shader::getFileContents(const std::string_view path) const{
-    std::cout<<path<<std::endl;
     std::stringstream buf;
-    std::ifstream fin(path.data());
+    std::ifstream fin(std::string("resources/") + path.data());
     if(!fin.is_open()){
         fin.close();
-        fin.open(std::string("../") + path.data()); 
+        fin.open(std::string("../resources/") + path.data()); 
     }
     buf << fin.rdbuf();
     fin.close();

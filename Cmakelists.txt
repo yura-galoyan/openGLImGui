@@ -1,49 +1,26 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(MyProject)
-
-# Specify the path to libglfw3.a
-set(GLFW_LIBRARY_PATH ${GLFW_LIB}/libglfw3.a)
-set(GLFW_DEPS dependencies/build/_deps)
-
-
-set(IMGUI_PATH dependencies/imgui)
-set(GLFW_INCLUDE sub/glfw/include)
-set(GLFW_LIB dependencies/glfw/lib)
-
-# Compile GLFW as a static library
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_INSTALL on CACHE BOOL "" FORCE)
-
-include_directories(${GLFW_INCLUDE})
-
-include_directories(${IMGUI_PATH})
-include_directories(${IMGUI_PATH}/backends)
-include_directories(dependencies/KHR)
-include_directories(dependencies)
-include_directories(${GLFW_DEBS}/glfw-src/include)
-include_directories(dependencies/build/_deps/glfw-src/include)
-
-# Specify static library directories
-set(static_libraries "-l:libimgui.a" "-l:libglad.a" )
-
+project(app)
 
 set(SOURCES
-glLoader.cpp
-glDrawer.cpp
-Shader.cpp
+project/glLoader.cpp
+project/glDrawer.cpp
+project/Shader.cpp
 )
 
+include_directories(sub/glfw/include)
+include_directories(dependencies)
+include_directories(dependencies/KHR)
+include_directories(dependencies/imgui)
+include_directories(dependencies/imgui/backends)
 add_subdirectory(dependencies)
 add_subdirectory(sub/glfw)
 
 # Create executable target for main.cpp
-add_executable(App main.cpp ${IMGUI_SRC} ${SOURCES})
+add_executable(app project/main.cpp ${SOURCES})
 
 # Find OpenGL library in System
 find_package(OpenGL REQUIRED)
 
 # Link App with GLFW and OpenGL libraries
-target_link_libraries(App PRIVATE ${static_libraries} OpenGL::GL)
+target_link_libraries(app PRIVATE dependencies glfw OpenGL::GL)

@@ -1,3 +1,7 @@
+cmake_minimum_required(VERSION 3.14)
+project(dependencies)
+
+
 # set path for glfw 
 set(CMAKE_INSTALL_PREFIX "../lib")
 include_directories(imgui)
@@ -15,5 +19,3 @@ imgui/backends/imgui_impl_opengl3.cpp
 )
 
 add_library(dependencies STATIC glad/glad.c ${IMGUI_SRC})
-
-install(TARGETS dependencies)

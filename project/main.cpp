@@ -29,18 +29,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
 };
 
-inline std::string getFileContents(const std::string_view path){
-
-    std::stringstream buf;
-    std::ifstream fin(path.data());
-    if(!fin.is_open()){
-       fin.open(std::string("../") + path.data()); 
-    }
-    buf << fin.rdbuf();
-    fin.close();
-    return buf.str();
-}
-
 int main(){
 
     glfwInit();
