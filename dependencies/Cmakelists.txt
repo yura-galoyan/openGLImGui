@@ -1,29 +1,6 @@
-cmake_minimum_required(VERSION 3.14)
-
-
-project(glfw)
-
-
-# Compile GLFW as a static library
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD)
-
 # set path for glfw 
-set(CMAKE_INSTALL_PREFIX "../glfw")
-
-# download and compile from Github
-include(FetchContent)
-FetchContent_Declare(
-  glfw
-  GIT_REPOSITORY https://github.com/glfw/glfw.git
-  GIT_TAG        3.3.4
-)
-FetchContent_MakeAvailable(glfw)
-
+set(CMAKE_INSTALL_PREFIX "../lib")
 include_directories(imgui)
-include_directories(build/_deps/glfw-src/include)
 include_directories(.)
 
 # set Imgui source files
@@ -37,7 +14,6 @@ imgui/backends/imgui_impl_glfw.cpp
 imgui/backends/imgui_impl_opengl3.cpp
 )
 
-add_library(glad STATIC glad/glad.c)
-add_library(imgui STATIC ${IMGUI_SRC})
+add_library(dependencies STATIC glad/glad.c ${IMGUI_SRC})
 
-add_dependencies(imgui glfw glad)
+install(TARGETS dependencies)
