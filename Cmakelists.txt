@@ -25,22 +25,21 @@ include_directories(dependencies)
 include_directories(${GLFW_DEBS}/glfw-src/include)
 include_directories(dependencies/build/_deps/glfw-src/include)
 
+# Specify static library directories
+target_link_directories(App PRIVATE dependencies/glfw/lib)
+target_link_directories(App PRIVATE dependencies/build)
+target_link_directories(App PRIVATE ${GLFW_DEPS}/glfw-build/src)
+set(static_libraries "-l:libglfw3.a" "-l:libimgui.a" "-l:libglad.a" )
+
+
 set(SOURCES
 glLoader.cpp
 glDrawer.cpp
 Shader.cpp
 )
 
-
 # Create executable target for main.cpp
 add_executable(App main.cpp ${IMGUI_SRC} ${SOURCES})
-
-# Specify glfw static lib directory
-target_link_directories(App PRIVATE dependencies/glfw/lib)
-target_link_directories(App PRIVATE dependencies/build)
-target_link_directories(App PRIVATE ${GLFW_DEPS}/glfw-build/src)
-set(static_libraries "-l:libglfw3.a" "-l:libimgui.a" "-l:libglad.a" )
-
 
 # Find OpenGL library in System
 find_package(OpenGL REQUIRED)
