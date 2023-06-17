@@ -13,6 +13,8 @@ include_directories(dependencies)
 include_directories(dependencies/KHR)
 include_directories(dependencies/imgui)
 include_directories(dependencies/imgui/backends)
+
+set(CMAKE_INSTALL_PREFIX glfw)
 add_subdirectory(dependencies)
 add_subdirectory(dependencies/glfw)
 
